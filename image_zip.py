@@ -3,12 +3,16 @@ import zipfile
 import cv2
 import matplotlib.pyplot as plt
 from shutil import move, make_archive
+from pathlib import Path
 from tqdm import tqdm
 class Dp_Image_Arch():
     def __init__(self):
-            self.file_mk = 'AVA_Batch/'
+            self.file_mk = 'unzipped/'
+            self.out_dir = None
+            self.in_dir = None
+            
     def batch_move(self):
-        files = [i.path for i in os.scandir('/home/frida/AVA_ALL_Main_ubuntu/ava_scraper/dp_challenge_new_images/') 
+        files = [i.path for i in os.scandir(self.in_dir) 
                  if i.name[-3:]=='jpg']
         print(len(files))
         if len(file)!=0:
@@ -35,7 +39,7 @@ class Dp_Image_Arch():
             self.file_mk = 'AVA_Batch/'
             
     def zip_batch(self):
-        zip_dir = '/home/frida/../../media/frida/DATA/AVA/DATA/dp_chall_batch_zip'
+        zip_dir = self.out_dir
         print(f'zipping to {zip_dir}')
         try:
             os.mkdir(zip_dir)
