@@ -1,39 +1,4 @@
-from matplotlib import rcParams
-import image_getter
-import json
-import cv2
-import glob
-from itertools import chain
-import os
-import pandas as pd
-import random
-import zipfile
-import shutil
-import albumentations as A
-import matplotlib.pyplot as plt
-import numpy as np
-import pandas as pd
-import torch
-import torch.nn as nn
-import torch.nn.functional as F
-import torch.optim as optim
-from linformer import Linformer
-from PIL import Image
-from sklearn.model_selection import train_test_split
-from torch.optim.lr_scheduler import StepLR
-from torch.utils.data import DataLoader, Dataset
-from torchvision import datasets, transforms
-from tqdm import tqdm
-from vit_pytorch.efficient import ViT
-from sklearn.utils import class_weight
-import time
-import copy
-import timm
-from albumentations import pytorch
-from pathlib import Path
-import torchvision
-
-
+%%writefile enging.py 
 from matplotlib import rcParams
 import image_getter
 def import_ava():
@@ -113,6 +78,17 @@ def get_labels(df):
     return {str(y_g[pair_key]['ID_y']):y_g[pair_key] for pair_key in y_g}
 
 def make_class_dir(df,y_g_dict):
+    '''creates text train val with class subdirs
+    
+    ⌊_train
+    |     ⌊_class 0
+    |     ⌊_class 1
+    ⌊_test
+    |     ⌊_class 0
+    |     ⌊_class 1
+    ⌊_val_
+          ⌊_class 0
+          ⌊_class 1'''
     
     os.makedirs('data/', exist_ok=True)
     train_dir = 'data/train/'
@@ -147,6 +123,7 @@ def make_class_dir(df,y_g_dict):
     
 
 def class_wts(df):
+    '''computes class weights for training samplere'''
     y_gt = df.values.ravel()
     y_gt_ = np.array(y_gt)
     y = np.bincount(y_gt_)
@@ -160,7 +137,7 @@ def class_wts(df):
     return class_weights, y
 
 def image_plot(image_dict, eval_list=None, super_title = None, n_images=None, evaluate=None):
-    
+    '''plots random images'''
     rcParams['axes.titlepad'] = 10
     if not evaluate:
         random_keys = np.random.choice(
@@ -210,6 +187,7 @@ def image_plot(image_dict, eval_list=None, super_title = None, n_images=None, ev
         plt.show()
 
 def get_all():
+    '''meta fucntion for calling other fuctions'''
     df = get_df()
     df = meta_process(df=df)
     class_weights, class_counts = class_wts(df['threshold'])
@@ -228,33 +206,94 @@ def get_all():
     return df, y_g_dict, splits, y_g_neg, y_g_pos
 
 def data_transforms():
+    '''defines data transform and returns a dict with test,train,val transforms'''
     mask1 = np.full(30 * 140, False) 
-    a_train_transform = A.Compose([A.augmentations.transforms.GridDistortion(
-                num_steps=5, distort_limit=0.6, interpolation=1, border_mode=4, value=4, mask_value=2, always_apply=False, p=0.5),
-            A.augmentations.geometric.resize.LongestMaxSize(max_size=224),
+    a_train_transform = A.Compose(
+        [
+         A.augmentations.transforms.GridDistortion(
+                num_steps=5, 
+                distort_limit=0.6, 
+                interpolation=1, 
+                border_mode=4, 
+                value=4, 
+                mask_value=2, 
+                always_apply=False, 
+                p=0.1),
+            A.augmentations.geometric.resize.LongestMaxSize(
+                max_size=224
+                ),
             A.augmentations.transforms.PadIfNeeded(224,224),
-            A.augmentations.transforms.Normalize(mean=(0.485, 0.456, 0.406), std=(0.229, 0.224, 0.225), 
-                                                max_pixel_value=255.0, p=1.0),
-            A.augmentations.transforms.MultiplicativeNoise(
-                multiplier=(0.1, 0.1), 
-            per_channel=False, elementwise=True, always_apply=False, p=0.1),
+            A.augmentations.transforms.Normalize(
+                mean=(0.485, 0.456, 0.406), 
+                std=(0.229, 0.224, 0.225), 
+                max_pixel_value=255.0, p=1.0),
             #A.augmentations.transforms.MedianBlur(blur_limit=7, always_apply=False, p=0.5)
-            A.augmentations.transforms.CoarseDropout (max_holes=10, max_height=72, max_width=72, 
-                                                    min_holes=3, min_height=36, min_width=36, 
-                                                    fill_value=(random.uniform(0, 1),random.uniform(0, 1), random.uniform(0, 1)) , mask_fill_value=(0.5,0.2,0.4), always_apply=False, p=0.25),
-            A.augmentations.transforms.ColorJitter(brightness=0.05, contrast=0.05, saturation=0.05, hue=0.05, always_apply=False, p=0.2),
-            A.augmentations.transforms.Cutout(num_holes=8, max_h_size=36, max_w_size=36, fill_value=(random.uniform(0, 1),random.uniform(0, 1), random.uniform(0, 1))
-            , always_apply=False, p=0.2),
-            A.augmentations.transforms.GaussianBlur(blur_limit=(3, 5), sigma_limit=0, always_apply=False, p=0.25),
-            A.augmentations.transforms.GaussNoise(var_limit=(0.1, 0.1), mean=0.1, per_channel=True, always_apply=False, p=0.2),
-            
-            A.augmentations.transforms.HueSaturationValue (hue_shift_limit=0.5, sat_shift_limit=0.3, val_shift_limit=0.1, always_apply=False, p=0.025),
-            A.augmentations.transforms.MotionBlur(blur_limit=3,p=0.2),
-            A.augmentations.geometric.rotate.SafeRotate (limit=90, interpolation=1, border_mode=4, value=None, mask_value=None, always_apply=False, p=0.5),
+            A.augmentations.transforms.CoarseDropout (max_holes=10, 
+                                                      max_height=72, 
+                                                      max_width=72, 
+                                                    min_holes=3, 
+                                                    min_height=36, 
+                                                    min_width=36, 
+                                                    fill_value=(random.uniform(0, 1),
+                                                                random.uniform(0, 1), 
+                                                                random.uniform(0, 1)) , 
+                                                      mask_fill_value=(0.5,0.2,0.4), 
+                                                      always_apply=False, p=0.1),
+            A.augmentations.transforms.ColorJitter(brightness=0.05, 
+                                                   contrast=0.05, 
+                                                   saturation=0.05, 
+                                                   hue=0.05, 
+                                                   always_apply=False,
+                                                   p=0.1),
+            A.augmentations.transforms.Cutout(
+                num_holes=8, 
+                max_h_size=36, 
+                max_w_size=36, 
+                fill_value=(
+                    random.uniform(0, 1),
+                    random.uniform(0, 1), 
+                    random.uniform(0, 1)
+                    ),
+                always_apply=False, 
+                p=0.1
+                ),
+            A.augmentations.transforms.GaussianBlur(
+                blur_limit=(3, 5), 
+                sigma_limit=0, 
+                always_apply=False, 
+                p=0.1
+                ),
+            A.augmentations.transforms.GaussNoise(
+                var_limit=(0.1, 0.1), 
+                mean=0.1, 
+                per_channel=True, 
+                always_apply=False, 
+                p=0.1
+                ),
+            A.augmentations.transforms.HueSaturationValue(
+                hue_shift_limit=0.1, 
+                sat_shift_limit=0.1, 
+                val_shift_limit=0.1, 
+                always_apply=False, 
+                p=0.01
+                ),
+            A.augmentations.transforms.MotionBlur(
+                blur_limit=3,p=0.2
+                ),
+            A.augmentations.geometric.rotate.SafeRotate(limit=30, 
+                                                        interpolation=1, 
+                                                        border_mode=4, 
+                                                        value=None, 
+                                                        mask_value=None, 
+                                                        always_apply=False, 
+                                                        p=0.1
+                                                        ),
         
             A.pytorch.transforms.ToTensorV2(
-                transpose_mask=False, p=1.0),]
-                            )
+                transpose_mask=False, p=1.0
+                )
+            ]
+            )
 
     a_test_transform = A.Compose([
             A.augmentations.geometric.resize.LongestMaxSize(max_size=224),
@@ -277,6 +316,7 @@ def data_transforms():
 
 
 class ava_data_reflect(Dataset):
+    '''data class wich is used by data loader retruns transformed image '''
     def __init__(self, im_dict, state = None, transform=None):
         self.im_dict = im_dict
         self.transform = transform
@@ -289,8 +329,11 @@ class ava_data_reflect(Dataset):
 
     def __getitem__(self, idx):
         #img_path = self.im_dict[self.files[idx]]['fid']
+        # reads symbolic links from test val train dirs returns rgb array
+        read = lambda fid: cv2.cvtColor(cv2.imread(os.readlink(fid)), cv2.COLOR_BGR2RGB).astype(np.uint8)
         img = self.im_dict[self.files[idx]]['fid']
         img = read(img)
+        # stacks grayscale images 
         if len(img.shape) !=3:
             img = np.stack([np.copy(img) for i in range(3)], axis=2)
              
@@ -316,6 +359,7 @@ class ava_data_reflect(Dataset):
         return img_transformed, label, self.im_dict[self.files[idx]]['fid']
 
 def plot_transform(data_dict):
+    '''plots data transforms'''
     idx = 11
     read = lambda fid: cv2.cvtColor(cv2.imread(os.readlink(fid)), cv2.COLOR_BGR2RGB).astype(np.uint8)
 
@@ -325,7 +369,7 @@ def plot_transform(data_dict):
     img = read(img_fid).astype(np.uint8)
     img_array = read(y_g_dict[list(y_g_dict.keys())[idx]]['fid'])
 
-    #refleciton_pad_fid = a_transform(image=img)['image'].permute(1,2,0)
+    #permute(1,2,0) permutes value of transfrom 'image' item from tesor to RGB 3 * 224 * 224
     refleciton_pad_array = reflect_transforms['training'](image=img)['image'].permute(1,2,0)
 
     print(img.shape)
@@ -356,9 +400,10 @@ def plot_transform(data_dict):
         axs[row,idx].set_ylabel(transforms_dict[key].shape[0])
         axs[row,idx].set_xlabel(transforms_dict[key].shape[1])
 
-def data_samplers(data, data_class):
+def data_samplers(data, data_class, batch_size=None):
+    '''retrurns data loaders called during training'''
     test_ids = [idx for idx in data['training']][:20]
-    # for debugging
+    # a small subset for debugging if needed <^_^> 
     data_tester = {key:data['training'][key] for key in test_ids}
     #change back
 
@@ -406,8 +451,7 @@ def data_samplers(data, data_class):
         )
     test_loader = DataLoader(
         dataset = test_data_loader,
-         batch_size=batch_size, s
-         huffle=True)
+         batch_size=batch_size, shuffle=True)
     return {'training':train_loader,'validation':val_loader, 'test': test_loader}
 
 def seed_everything(seed):
@@ -420,23 +464,24 @@ def seed_everything(seed):
     torch.backends.cudnn.deterministic = True
 
 
-def colors():
-    colors = ('#fecae9','#fe99d6','#fe68c3','#fe37af','#fe079c','#d30080','#a20062','#710044','#410027','#100009')
-    for color in colors:
-        yield color
-
-def train_model(model, criterion, optimizer, scheduler, 
+def train_model(model, criterion, 
+                optimizer, 
+                scheduler, 
                 num_epochs=None, 
-                model_name = None, did = None):
+                model_name = None, 
+                did = None):
+    '''Training and validation loops- 1 loop == one epoch
+    has a saving fuciton saving model on best epoch
+    records total train time'''
     results = { }
-    
+    # pathlib path object --> most pythonic option. 
     did = Path(did)
     did = did/model_name
     os.makedirs(did,exist_ok=True)
     print(f'currently trianing {model_name}')
     print(f'{model_name} will be saved at {did/model_name}')
     since = time.time()
-
+    # copy state dict for best model saving (training could make them worse)
     best_model_wts = copy.deepcopy(model.state_dict())
     best_acc = 0.0
 
@@ -498,29 +543,38 @@ def train_model(model, criterion, optimizer, scheduler,
                 phase+ ' ballance_acc':ballance.mean()
                 }
             print(results)
+            # w mode to overwirte existing json - reading and re writing 
+            # in append modes can cause jsaon formatting issues
+            # files are json for ease of loading to python dict in evaluation
             with open(did/(model_name+'.json'), 'w') as handle:   
                     json.dump(results, handle)
 
 
             # deep copy the model
-            if phase == 'validation' and ballance.mean() > best_acc:
-                best_acc = ballance.mean()
+            if phase == 'validation' and epoch_acc > best_acc:
+                best_acc = epoch_acc 
                 best_model_wts = copy.deepcopy(model.state_dict())
                 torch.save({'epoch':epoch, 
                             'model_state_dict':model.state_dict(),
                             'optimizer_state_dict':optimizer.state_dict()
                             }, did/model_name)
+                print(f'Saving {model_name} in {did.name}')
                 #model save
 
-        print()
-
     time_elapsed = time.time() - since
-    print('Training complete in {:.0f}m {:.0f}s'.format(
-        time_elapsed // 60, time_elapsed % 60))
-    print('Best val Acc: {:4f}'.format(best_acc))
+    t_mins, t_seconds = time_elapsed // 60, time_elapsed % 60
+    train_overall = {
+        'mins':t_mins, 
+        'seconds':t_seconds, 
+        'best_acc': best_acc
+        }
+    print(f'training time = {train_overall}')
+    with open(did/('train_overall'+'.json'), 'w') as handle:
+        json.dump(train_overall, handle)
 
 
 def loader(models):
+    '''genrator for models when loooping through all models'''
     for mod in models:
         print(mod)
         if 'resnet' in mod:
@@ -541,6 +595,7 @@ def loader(models):
             yield model,mod
             
 def deep_eval(model):
+    '''validatioan loop ruturns metrics dict for passed model'''
     color = colors()
     criterion = nn.CrossEntropyLoss()
     model.to(device)
