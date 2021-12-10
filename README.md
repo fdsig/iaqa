@@ -3,7 +3,9 @@
 ## contains:
 >> training files for AVA benchmarking datase as binary classificaiton
 training is from directories in the following format:
-``` wd\
+
+```
+   wd\
       |
       ⌊_train\
       |       ⌊_\low
@@ -13,7 +15,9 @@ training is from directories in the following format:
       |      ⌊_\high
       ⌊_val\
             ⌊_\low
-            ⌊_\high```
+            ⌊_\high
+```
+
 >> data dictionary of IAQA datasets with a file structure correspoinding to classes of each IAQA dataset
 
->> a terminal runnable version --including args -- parse is to be completed
+>> a terminal runnable version --including args --parse is to be completed
