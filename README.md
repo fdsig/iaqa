@@ -45,5 +45,5 @@ compile results:
 
 [Mawady](https://github.com/mawady)
 
-- [ ] Train on AVA CaiT
-- [ ] Train on AVA BeiT
+- [ ] Train on AVA CaiT locally
+- [ ] Train on AVA BeiT locally
