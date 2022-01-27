@@ -20,9 +20,12 @@ training is from directories in the following format:
 >> A terminal runnable version --including args --parse is to be completed
 
 
->> running  colab notebook here:
->> Colab notebook which evaluates Defocus Deblurring: [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/drive/1cwhu6qsGy0Pc3tnXWo82hq3uhV5-fTu-?usp=sharing)
- 
+** running  colab notebook here:**
+[![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/drive/1cwhu6qsGy0Pc3tnXWo82hq3uhV5-fTu-?usp=sharing)
+
+**Evaluation Notebook**
+
+[![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/drive/1f4N2tefnfAWme2ro2O8LU_FwuOfDo_fC?usp=sharing)
 
 
 Frida
