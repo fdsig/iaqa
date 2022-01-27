@@ -26,7 +26,9 @@ training is from directories in the following format:
 
 
 Frida
+
 **Training:**
+
 - [ ] Select alternative IAQA dataset 28/01
 - [ ] train all models on second database: 
 >> - [ ] Resnets {18,50,152}  29/01
@@ -35,14 +37,17 @@ Frida
 >> - [ ] CaiT
 >> - [ ] BeiT
 - [ ] Evaluate all models
+
 **code:**
+
 - [ ] write guidance cells for colab nb. 27/01
 - [ ] terminal runnable code with args parsers feb
 - [ ] separate python files (resolving import of data augmentation class) feb
 - [ ] create notebook with public trained models feb
 
 **EVAL**
-- [ ]compile results 
+
+- [ ] compile results 
 
 [Mawady](https://github.com/mawady)
 **Training:**
