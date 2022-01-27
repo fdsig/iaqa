@@ -25,25 +25,26 @@ training is from directories in the following format:
  
 
 
-Me.self
-**Training:** 
-- [ ] Select alternative iaqa dataset
-- [ ] train all models on second database:
->> - [ ] Resnet
->> - [ ] CvT
+Frida
+**Training:**
+- [ ] Select alternative IAQA dataset 28/01
+- [ ] train all models on second database: 
+>> - [ ] Resnets {18,50,152}  29/01
+>> - [ ] CvT 29/01
 >> - [ ] ConViT (T,S,B)
 >> - [ ] CaiT
 >> - [ ] BeiT
 - [ ] Evaluate all models
 **code:**
-- [ ] terminal runnalbe code with args parsere
-- [ ] sepparate python files (resolving import of data augmentation class) 
-- [ ] create notebook with public trained models and 
+- [ ] write guidance cells for colab nb. 27/01
+- [ ] terminal runnable code with args parsers feb
+- [ ] separate python files (resolving import of data augmentation class) feb
+- [ ] create notebook with public trained models feb
 
-compile results:
-
+**EVAL**
+- [ ]compile results 
 
 [Mawady](https://github.com/mawady)
-
-- [ ] Train on AVA CaiT locally
-- [ ] Train on AVA BeiT locally
+**Training:**
+- [ ] Train on AVA CaiT locally 28/01-30/01
+- [ ] Train on AVA BeiT locally 28/01-30/01
