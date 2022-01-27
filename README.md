@@ -21,9 +21,8 @@ training is from directories in the following format:
 
 
 >> running  colab notebook here:
->> Colab notebook which evaluates Defocus Deblurring: [![Open In Colab](https://colab.research.google.com/drive/1cwhu6qsGy0Pc3tnXWo82hq3uhV5-fTu-?usp=sharing)
+>> Colab notebook which evaluates Defocus Deblurring: [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/drive/1cwhu6qsGy0Pc3tnXWo82hq3uhV5-fTu-?usp=sharing)
  
-
 
 
 Me.self
