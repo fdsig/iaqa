@@ -20,7 +20,8 @@ training is from directories in the following format:
 >> A terminal runnable version --including args --parse is to be completed
 
 
-** running  colab notebook here:**
+**Trainin Notebook:**
+
 [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/drive/1cwhu6qsGy0Pc3tnXWo82hq3uhV5-fTu-?usp=sharing)
 
 **Evaluation Notebook**
