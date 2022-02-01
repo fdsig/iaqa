@@ -4,7 +4,7 @@
 >> training files for AVA benchmarking datase as binary classificaiton
 training is from directories in the following format:
 
-```
+```bash
    cwd\
        ⌊_train\
        |       ⌊_low\
@@ -27,13 +27,18 @@ training is from directories in the following format:
 **Evaluation Notebook**
 
 [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/drive/1f4N2tefnfAWme2ro2O8LU_FwuOfDo_fC?usp=sharing)
+## DATA:
 
+|Dataset|n Images|Size (compressed)|
+|-------|--------|-----------------|
+|[AVA](https://drive.google.com/drive/folders/1uc-jyzGNndFvhdiHaxAvEkj-jP5e6F1f?usp=sharing))| 255508|  32 GB batched into| 
+|[IAD](https://drive.google.com/open?id=1Viswtzb77vqqaaICAQz9iuZ8OEYCu6-_)|10k |2GB| 
 
 Frida
 
 **Training:**
 
-- [ ] Select alternative IAQA dataset 28/01
+- [x ] Select alternative IAQA dataset 28/01
 - [ ] train all models on second database: 
 >> - [ ] Resnets {18,50,152}  29/01
 >> - [ ] CvT 29/01
