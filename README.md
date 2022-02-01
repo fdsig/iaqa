@@ -31,8 +31,22 @@ training is from directories in the following format:
 
 |Dataset|n Images|Size (compressed)|
 |-------|--------|-----------------|
-|[AVA](https://drive.google.com/drive/folders/1uc-jyzGNndFvhdiHaxAvEkj-jP5e6F1f?usp=sharing))| 255508|  32 GB batched into| 
+|[AVA](https://drive.google.com/drive/folders/1uc-jyzGNndFvhdiHaxAvEkj-jP5e6F1f?usp=sharing))| 255508|  32 GB batched into 44 .zip| 
 |[IAD](https://drive.google.com/open?id=1Viswtzb77vqqaaICAQz9iuZ8OEYCu6-_)|10k |2GB| 
+
+
+can use:
+
+to get ava:
+
+```bash
+gdown https://drive.google.com/drive/folders/1uc-jyzGNndFvhdiHaxAvEkj-jP5e6F1f?usp=sharing
+```
+to get IAD:
+
+```bash
+gdown https://drive.google.com/open?id=1Viswtzb77vqqaaICAQz9iuZ8OEYCu6-_
+```
 
 Frida
 
