@@ -76,7 +76,7 @@ Frida
 
 - [ ] compile results 
 
-[Mawady](https://github.com/mawad)y
+[Mawady](https://github.com/mawady)
 **Training:**
 - [ ] Train on AVA CaiT locally 28/01-30/01
 - [ ] Train on AVA BeiT locally 28/01-30/01
