@@ -1,5 +1,5 @@
 from matplotlib import rcParams
-import image_getter
+import utils.image_getter as image_getter
 import json
 import cv2
 import glob
