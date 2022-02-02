@@ -1,4 +1,3 @@
-%%writefile enging.py 
 from matplotlib import rcParams
 import image_getter
 def import_ava():
