@@ -4,6 +4,10 @@ import os
 import zipfile
 import shutil
 from tqdm import tqdm
+import importlib
+
+if importlib.util.find_spec('google'):
+    from google.colab import drive
 
 class Get_Ava:
 
@@ -22,8 +26,6 @@ class Get_Ava:
 
     def __init__(self,**kwargs):
         ''' dowloads models and ava images form gooogle dive (no mounting)'''
-        drive.flush_and_unmount()
-        os.system('git clone https://github.com/Openning07/MPADA.git')
         self.google_getter
         self.download_ava_files 
         
@@ -74,12 +76,6 @@ class Get_Ava:
         self.args['file_names']=['ava_files_urls.txt']
         self.args['dest_path']= './batch_meta/'
         
-
-
-
-
-
-
     def google_getter(self):
 
         file_keys = [url.split('/')[3].split('=')[1] for url in self.args['urls'] 
@@ -99,7 +95,7 @@ class Get_Ava:
     
     def ava_txt(self):
         """this fucntin reads from frida de sigleys google drive usin share keys"""
-        with open('/content/batch_meta/ava_files_urls.txt', 'r') as fb:
+        with open('batch_meta/ava_files_urls.txt', 'r') as fb:
             txt = fb.readlines()
         self.files_crypt = [i.split('/')[-2] for i in txt[0].split(',')]
         if len(self.files_crypt)==44:

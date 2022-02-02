@@ -1,37 +1,13 @@
-
-import classifier
 import argparse
-
+from train_utils import engine, image_getter
 
 #hugging face api autonlp argugments (passed back to lower level in stack) 
 
 parser = argparse.ArgumentParser(description='Training Calssifier ')
 
 
-parser.add_argument('--input csv', default='gender-classifier-DFE-791531.csv', 
+parser.add_argument('--download ava', default='gender-classifier-DFE-791531.csv', 
                     type=str, help='relative loacation of input csv for training')
-parser.add_argument('--project', default='gender_class', type=str, help='poject name')
-
-
-parser.add_argument('--split', default='train', type=str, help='dataset split')
-
-parser.add_argument('--col_mapping',default=None, type=str, help='text:text, label:target')
-
-parser.add_argument('--files',default='gender_text_train.csv', type=str, 
-                    help='formated csv only 2 colls one for text one for target')
-
-parser.add_argument('--api_key', default=None, type=str, help='api key from hugging_face account')
-parser.add_argument('--resize', type=int, help='Resizes images by percentage as scalar')
-
-
-parser.add_argument('--name', type=str, help='project name hugging face')
-
-parser.add_argument('--language', type=str, help='lang in eg [en,sp,fr]')
-
-parser.add_argument('--task', type=str, default='binary_classification',
-                    help='Resizes images by percentage as scalar')
-parser.add_argument('--max_models', type=int, default=2, help= 'nuber of trainable models')
-parser.add_argument('--create_project', action='store_true',  help='create_new hf project')
 
 #meta args-- directing sub process
 parser.add_argument('--hugging_face', action='store_true', help='uses hugging face api to train model')
@@ -45,14 +21,20 @@ args = parser.parse_args()
 
 if __name__=='__main__':
     print('here')
-    
-    if args.hugging_face:
-        print(args.api_key)
-        classifier.train_hf_api(args)
-    
-        print('Model trianing using autonlp (hugging face api)')
-       
 
+
+def import_ava():
+
+    pull = image_getter.Get_Ava()
+    pull.parse_urls()
+    pull.google_getter()
+    pull.ava_txt()
+    pull.download_ava_files(own_drive=False, 
+                            download=True, 
+                            full=True, 
+                            clear_current=False)
+
+import_ava()
     
    
     
