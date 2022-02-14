@@ -22,7 +22,14 @@ training is from directories in the following format:
 
 **Training Notebook:**
 
+binary:
+
 [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/drive/1cwhu6qsGy0Pc3tnXWo82hq3uhV5-fTu-?usp=sharing)
+
+ten bin thresholded classificaiont:
+
+[![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/drive/1cwhu6qsGy0Pc3tnXWo82hq3uhV5-fTu-?usp=sharing)
+
 
 **Evaluation Notebook:**
 
@@ -55,7 +62,7 @@ gdown https://drive.google.com/open?id=1Viswtzb77vqqaaICAQz9iuZ8OEYCu6-_
 Frida
 
 **Training:**
-
+- [ ] write code for 10 cls
 - [x] Select alternative IAQA dataset 28/01
 - [ ] train all models on second database: 
 >> - [ ] Resnets {18,50,152}  29/01
