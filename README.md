@@ -26,9 +26,9 @@ binary:
 
 [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/drive/1cwhu6qsGy0Pc3tnXWo82hq3uhV5-fTu-?usp=sharing)
 
-ten bin thresholded classificaiont:
+ten bin thresholded classifier:
 
-[![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/drive/1cwhu6qsGy0Pc3tnXWo82hq3uhV5-fTu-?usp=sharing)
+[![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/drive/1KjreMG4oe-4gjc4t3XY16VABKzRv8mag#scrollTo=VUimL6r3LcX-)
 
 
 **Evaluation Notebook:**
